@@ -1,6 +1,10 @@
 package com.acme.plugin;
 
+import org.jboss.seam.forge.project.Project;
+import org.jboss.seam.forge.resources.java.JavaResource;
 import org.jboss.seam.forge.shell.plugins.*;
+
+import javax.inject.Inject;
 
 /**
  * Created by IntelliJ IDEA.
@@ -11,7 +15,13 @@ import org.jboss.seam.forge.shell.plugins.*;
  */
 
 @Alias("log")
+@RequiresProject
+@RequiresResource(JavaResource.class)
+@Help("A plugin to add simple logging")
 public class LogPlugin implements Plugin {
+
+    @Inject
+   private Project project;
 
     // log myvalue
     @DefaultCommand
