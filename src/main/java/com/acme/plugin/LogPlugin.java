@@ -20,14 +20,14 @@ public class LogPlugin implements Plugin {
     }
 
     // log perform myvalue
-    @Command("perform")
+    @Command("perform1")
     public void exampleCommand(@Option String opt, PipeOut out) {
 
         out.println(">> the command \"perform\" was invoked with the value: " + opt);
     }
 
     // log --one cat --two dog
-    @Command("perform")
+    @Command("perform2")
     public void exampleCommand(
             @Option(name = "one", shortName = "o") String one, @Option(name = "two") String two, PipeOut out) {
         out.println(">> option one equals: " + one);
