@@ -1,5 +1,6 @@
 package com.acme.plugin;
 
+import org.jboss.logging.Logger;
 import org.jboss.seam.forge.parser.java.JavaClass;
 import org.jboss.seam.forge.parser.java.JavaSource;
 import org.jboss.seam.forge.project.Project;
@@ -41,9 +42,14 @@ public class LogPlugin implements Plugin {
         System.out.println("## " + shell.getCurrentResource());
 
 
+
         try {
-            JavaClass entity = getJavaClass();
-            System.out.println(entity.getMethods());
+            JavaClass clazz = getJavaClass();
+
+            clazz.addImport(Logger.class);
+
+
+            //System.out.println(entity.getMethods());
 
             //addFieldTo(entity, String.class, opt, Column.class);
         } catch (FileNotFoundException e) {
