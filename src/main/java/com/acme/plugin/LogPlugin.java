@@ -1,10 +1,15 @@
 package com.acme.plugin;
 
+import org.jboss.seam.forge.parser.java.JavaClass;
+import org.jboss.seam.forge.parser.java.JavaSource;
 import org.jboss.seam.forge.project.Project;
+import org.jboss.seam.forge.resources.Resource;
 import org.jboss.seam.forge.resources.java.JavaResource;
+import org.jboss.seam.forge.shell.Shell;
 import org.jboss.seam.forge.shell.plugins.*;
 
 import javax.inject.Inject;
+import java.io.FileNotFoundException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -20,13 +25,31 @@ import javax.inject.Inject;
 @Help("A plugin to add simple logging")
 public class LogPlugin implements Plugin {
 
+    private final Project project;
+    private final Shell shell;
+
     @Inject
-   private Project project;
+    public LogPlugin(final Project project, final Shell shell) {
+        this.project = project;
+        this.shell = shell;
+    }
 
     // log myvalue
     @DefaultCommand
     public void exampleDefaultCommand(@Option String opt) {
         System.out.println(">> invoked default command with option value: " + opt);
+        System.out.println("## " + shell.getCurrentResource());
+
+
+        try {
+            JavaClass entity = getJavaClass();
+            System.out.println(entity.getMethods());
+
+            //addFieldTo(entity, String.class, opt, Column.class);
+        } catch (FileNotFoundException e) {
+            shell.println("Could not locate the @Entity requested. No update was made.");
+        }
+
     }
 
     // log perform myvalue
@@ -43,4 +66,25 @@ public class LogPlugin implements Plugin {
         out.println(">> option one equals: " + one);
         out.println(">> option two equals: " + two);
     }
+
+    // TODO msc rausziehen
+    private JavaClass getJavaClass() throws FileNotFoundException {
+        Resource<?> resource = shell.getCurrentResource();
+        if (resource instanceof JavaResource) {
+            return getJavaClassFrom(resource);
+        } else {
+            throw new RuntimeException("Current resource is not a JavaResource!");
+        }
+
+    }
+
+
+    private JavaClass getJavaClassFrom(final Resource<?> resource) throws FileNotFoundException {
+        JavaSource<?> source = ((JavaResource) resource).getJavaSource();
+        if (!source.isClass()) {
+            throw new IllegalStateException("Current resource is not a JavaClass!");
+        }
+        return (JavaClass) source;
+    }
+
 }
