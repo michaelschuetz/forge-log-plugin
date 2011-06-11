@@ -4,6 +4,7 @@ import org.jboss.logging.Logger;
 import org.jboss.seam.forge.parser.java.JavaClass;
 import org.jboss.seam.forge.parser.java.JavaSource;
 import org.jboss.seam.forge.project.Project;
+import org.jboss.seam.forge.project.facets.JavaSourceFacet;
 import org.jboss.seam.forge.resources.Resource;
 import org.jboss.seam.forge.resources.java.JavaResource;
 import org.jboss.seam.forge.shell.Shell;
@@ -42,12 +43,16 @@ public class LogPlugin implements Plugin {
         System.out.println("## " + shell.getCurrentResource());
 
 
+        JavaSourceFacet javaFacet = project.getFacet(JavaSourceFacet.class);
+
 
         try {
             JavaClass clazz = getJavaClass();
 
+            //TODO msc Abfrage
             clazz.addImport(Logger.class);
 
+            javaFacet.saveJavaSource(clazz);
 
             //System.out.println(entity.getMethods());
 
