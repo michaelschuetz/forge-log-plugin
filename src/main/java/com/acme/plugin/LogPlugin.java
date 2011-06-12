@@ -4,6 +4,7 @@ import org.jboss.logging.Logger;
 import org.jboss.seam.forge.parser.java.Field;
 import org.jboss.seam.forge.parser.java.JavaClass;
 import org.jboss.seam.forge.parser.java.JavaSource;
+import org.jboss.seam.forge.parser.java.Method;
 import org.jboss.seam.forge.project.Project;
 import org.jboss.seam.forge.project.facets.JavaSourceFacet;
 import org.jboss.seam.forge.resources.Resource;
@@ -57,8 +58,9 @@ public class LogPlugin implements Plugin {
             field.setName("log").setPrivate().setType(type).addAnnotation(Inject.class);
 
             // TODO msc How to change existing methods?
-            clazz.getMethod("save").setBody("hallo");
-
+            Method<JavaClass> method = clazz.getMethod("save");
+            String body = method.getBody();
+            method.setBody(body);
 
             javaFacet.saveJavaSource(clazz);
 
