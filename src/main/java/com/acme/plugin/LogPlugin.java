@@ -60,7 +60,7 @@ public class LogPlugin implements Plugin {
             // TODO msc How to change existing methods?
             Method<JavaClass> method = clazz.getMethod("save");
             String body = method.getBody();
-            method.setBody(body);
+            method.setBody("log.info(\"############### new Customer TODO created\");" + body);
 
             javaFacet.saveJavaSource(clazz);
 
