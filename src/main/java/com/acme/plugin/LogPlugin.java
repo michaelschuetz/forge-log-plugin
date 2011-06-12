@@ -50,21 +50,16 @@ public class LogPlugin implements Plugin {
         try {
             JavaClass clazz = getJavaClass();
 
-            //TODO msc Abfrage    import
             // bob as param
             Field<JavaClass> field = clazz.addField();
             Class type = Logger.class;
 
-            field.setName("log").setPrivate().setType(type.getName()).addAnnotation(Inject.class);
-            //clazz.addImport(type.getCanonicalName());
+            field.setName("log").setPrivate().setType(type).addAnnotation(Inject.class);
 
             javaFacet.saveJavaSource(clazz);
 
-            //System.out.println(entity.getMethods());
-
-            //addFieldTo(entity, String.class, opt, Column.class);
         } catch (FileNotFoundException e) {
-            shell.println("Could not locate the @Entity requested. No update was made.");
+            shell.println("Could not locate the class requested. No update was made.");
         }
 
     }
