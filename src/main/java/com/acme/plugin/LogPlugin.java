@@ -53,9 +53,11 @@ public class LogPlugin implements Plugin {
             //TODO msc Abfrage    import
             // bob as param
             Field<JavaClass> field = clazz.addField();
-            field.setName("bob").setPrivate().setType(clazz.getName()).addAnnotation(Inject.class);
-            clazz.addImport(clazz.getQualifiedName());
-            clazz.addImport(Logger.class);
+            Class type = Logger.class;
+
+            field.setName("log").setPrivate().setType(clazz.getName()).addAnnotation(Inject.class);
+            clazz.addImport(type.getCanonicalName());
+            clazz.addImport(type);
 
             javaFacet.saveJavaSource(clazz);
 
