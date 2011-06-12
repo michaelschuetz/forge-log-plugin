@@ -1,6 +1,7 @@
 package com.acme.plugin;
 
 import org.jboss.logging.Logger;
+import org.jboss.seam.forge.parser.java.Field;
 import org.jboss.seam.forge.parser.java.JavaClass;
 import org.jboss.seam.forge.parser.java.JavaSource;
 import org.jboss.seam.forge.project.Project;
@@ -49,11 +50,12 @@ public class LogPlugin implements Plugin {
         try {
             JavaClass clazz = getJavaClass();
 
-            //TODO msc Abfrage
+            //TODO msc Abfrage    import
+            // bob as param
+            Field<JavaClass> field = clazz.addField();
+            field.setName("bob").setPrivate().setType(clazz.getName()).addAnnotation(Inject.class);
+            clazz.addImport(clazz.getQualifiedName());
             clazz.addImport(Logger.class);
-
-            clazz.addField();
-            clazz.addField("bbb");
 
             javaFacet.saveJavaSource(clazz);
 
