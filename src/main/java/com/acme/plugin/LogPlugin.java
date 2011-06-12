@@ -52,6 +52,9 @@ public class LogPlugin implements Plugin {
             //TODO msc Abfrage
             clazz.addImport(Logger.class);
 
+            clazz.addField();
+            clazz.addField("bbb");
+
             javaFacet.saveJavaSource(clazz);
 
             //System.out.println(entity.getMethods());
