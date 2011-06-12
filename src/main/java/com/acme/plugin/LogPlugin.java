@@ -55,9 +55,8 @@ public class LogPlugin implements Plugin {
             Field<JavaClass> field = clazz.addField();
             Class type = Logger.class;
 
-            field.setName("log").setPrivate().setType(clazz.getName()).addAnnotation(Inject.class);
+            field.setName("log").setPrivate().setType(type.getName()).addAnnotation(Inject.class);
             clazz.addImport(type.getCanonicalName());
-            clazz.addImport(type);
 
             javaFacet.saveJavaSource(clazz);
 
