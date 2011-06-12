@@ -56,6 +56,10 @@ public class LogPlugin implements Plugin {
 
             field.setName("log").setPrivate().setType(type).addAnnotation(Inject.class);
 
+            // TODO msc How to change existing methods?
+            clazz.getMethod("save").setBody("hallo");
+
+
             javaFacet.saveJavaSource(clazz);
 
         } catch (FileNotFoundException e) {
