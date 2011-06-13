@@ -59,7 +59,7 @@ public class LogPlugin implements Plugin {
             Method<JavaClass> method = clazz.getMethod(targetMethod);
             if (method != null) {
                 final String body = method.getBody();
-                final String logStatement = fieldName + "info(\"############### new Customer TODO created\");";
+                final String logStatement = fieldName + ".info(\"############### new Customer TODO created\");";
                 if (!body.contains(logStatement)) {
                     method.setBody(logStatement + body);
                 }
