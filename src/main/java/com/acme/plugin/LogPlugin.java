@@ -17,11 +17,9 @@ import javax.inject.Inject;
 import java.io.FileNotFoundException;
 
 /**
- * Created by IntelliJ IDEA.
- * User: mschuetz
- * Date: 10.06.11
- * Time: 23:13
- * To change this template use File | Settings | File Templates.
+ * Forge plugin for adding logging functionality to CDI/JBoss environment.
+ *
+ * @author <a href="mailto:michaelschuetz83@gmail.com">Michael Schuetz</a>
  */
 
 @Alias("log")
@@ -39,8 +37,17 @@ public class LogPlugin implements Plugin {
         this.shell = shell;
     }
 
+    /**
+     * Default command for adding log statements.
+     * <p/>
+     * call: log myMethodName
+     *
+     * @param targetMethod
+     * @param out
+     */
     @DefaultCommand(help = "injects logger and add log statement for method")
-    public void exampleDefaultCommand(@Option(required = true, description = "haaaaaaaaalo", help="target method name") String targetMethod, PipeOut out) {
+    public void logCommand(@Option(required = true, help = "target method name") String targetMethod,
+                           PipeOut out) {
         out.println(">> invoked default log command with option value: " + targetMethod);
 
         final JavaSourceFacet javaFacet = project.getFacet(JavaSourceFacet.class);
@@ -59,7 +66,7 @@ public class LogPlugin implements Plugin {
             Method<JavaClass> method = clazz.getMethod(targetMethod);
             if (method != null) {
                 final String body = method.getBody();
-                final String logStatement = fieldName + ".info(\"############### new Customer TODO created\");";
+                final String logStatement = fieldName + ".info(\"" + method.getName() + " method called\");";
                 if (!body.contains(logStatement)) {
                     method.setBody(logStatement + body);
                 }
