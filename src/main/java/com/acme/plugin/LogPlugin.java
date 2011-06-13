@@ -50,6 +50,9 @@ public class LogPlugin implements Plugin {
 
             final String fieldName = "log";
             // add new field if not exists
+
+            out.println("#### " + clazz.getField(fieldName));
+
             if (clazz.getField(fieldName) != null) {
                 final Field<JavaClass> field = clazz.addField();
                 field.setName(fieldName).setPrivate().setType(Logger.class).addAnnotation(Inject.class);
