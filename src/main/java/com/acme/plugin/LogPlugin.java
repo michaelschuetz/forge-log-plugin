@@ -40,7 +40,7 @@ public class LogPlugin implements Plugin {
     }
 
     @DefaultCommand(help = "injects logger and add log statement for method")
-    public void exampleDefaultCommand(@Option(name = "method", shortName = "m", required = true) String targetMethod, PipeOut out) {
+    public void exampleDefaultCommand(@Option(required = true) String targetMethod, PipeOut out) {
         out.println(">> invoked default log command with option value: " + targetMethod);
 
         final JavaSourceFacet javaFacet = project.getFacet(JavaSourceFacet.class);
@@ -59,9 +59,12 @@ public class LogPlugin implements Plugin {
             Method<JavaClass> method = clazz.getMethod(targetMethod);
             if (method != null) {
                 final String body = method.getBody();
-                method.setBody("log.info(\"############### new Customer TODO created\");" + body);
+                final String logStatement = fieldName + "info(\"############### new Customer TODO created\");";
+                if (!body.contains(logStatement)) {
+                    method.setBody(logStatement + body);
+                }
             } else {
-                out.println(ShellColor.RED, "method does not exist");
+                out.println(ShellColor.RED, ">> method does not exist");
             }
 
             // save class
