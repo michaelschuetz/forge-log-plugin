@@ -46,22 +46,19 @@ public class LogPlugin implements Plugin {
         final JavaSourceFacet javaFacet = project.getFacet(JavaSourceFacet.class);
 
         try {
-            JavaClass clazz = getJavaClass();
+            final JavaClass clazz = getJavaClass();
 
-            final String fieldName = "log";
             // add new field if not exists
-
-            out.println("#### " + clazz.getField(fieldName));
-
-            if (clazz.getField(fieldName) != null) {
+            final String fieldName = "log";
+            if (clazz.getField(fieldName) == null) {
                 final Field<JavaClass> field = clazz.addField();
                 field.setName(fieldName).setPrivate().setType(Logger.class).addAnnotation(Inject.class);
             }
 
-            // ad log statement to method
+            // add log statement to method
             Method<JavaClass> method = clazz.getMethod(targetMethod);
             if (method != null) {
-                String body = method.getBody();
+                final String body = method.getBody();
                 method.setBody("log.info(\"############### new Customer TODO created\");" + body);
             } else {
                 out.println(ShellColor.RED, "method does not exist");
