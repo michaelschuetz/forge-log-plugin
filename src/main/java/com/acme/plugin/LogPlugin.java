@@ -40,7 +40,7 @@ public class LogPlugin implements Plugin {
     }
 
     @DefaultCommand(help = "injects logger and add log statement for method")
-    public void exampleDefaultCommand(@Option(required = true) String targetMethod, PipeOut out) {
+    public void exampleDefaultCommand(@Option(required = true, help="target method name") String targetMethod, PipeOut out) {
         out.println(">> invoked default log command with option value: " + targetMethod);
 
         final JavaSourceFacet javaFacet = project.getFacet(JavaSourceFacet.class);
