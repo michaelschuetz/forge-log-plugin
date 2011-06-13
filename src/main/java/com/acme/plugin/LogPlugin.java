@@ -38,54 +38,34 @@ public class LogPlugin implements Plugin {
         this.shell = shell;
     }
 
-    // log myvalue
-    @DefaultCommand
-    public void exampleDefaultCommand(@Option String opt) {
-        System.out.println(">> invoked default command with option value: " + opt);
-        System.out.println("## " + shell.getCurrentResource());
+    @DefaultCommand(help = "injects logger and add log statement for method")
+    public void exampleDefaultCommand(@Option(name = "method", shortName = "m", required = true) String targetMethod, PipeOut out) {
+        out.println(">> invoked default log command with option value: " + targetMethod);
 
-
-        JavaSourceFacet javaFacet = project.getFacet(JavaSourceFacet.class);
-
+        final JavaSourceFacet javaFacet = project.getFacet(JavaSourceFacet.class);
 
         try {
             JavaClass clazz = getJavaClass();
 
-            // bob as param
-            Field<JavaClass> field = clazz.addField();
-            Class type = Logger.class;
+            final String fieldName = "log";
+            // add new field if not exists
+            if (clazz.getField(fieldName) != null) {
+                final Field<JavaClass> field = clazz.addField();
+                field.setName(fieldName).setPrivate().setType(Logger.class).addAnnotation(Inject.class);
+            }
 
-            field.setName("log").setPrivate().setType(type).addAnnotation(Inject.class);
-
-            // TODO msc How to change existing methods?
-            Method<JavaClass> method = clazz.getMethod("save");
+            Method<JavaClass> method = clazz.getMethod(targetMethod);
             String body = method.getBody();
             method.setBody("log.info(\"############### new Customer TODO created\");" + body);
 
             javaFacet.saveJavaSource(clazz);
 
         } catch (FileNotFoundException e) {
-            shell.println("Could not locate the class requested. No update was made.");
+            out.println("Could not locate the class requested. No update was made.");
         }
 
     }
 
-    // log perform myvalue
-    @Command("perform1")
-    public void exampleCommand(@Option String opt, PipeOut out) {
-
-        out.println(">> the command \"perform\" was invoked with the value: " + opt);
-    }
-
-    // log --one cat --two dog
-    @Command("perform2")
-    public void exampleCommand(
-            @Option(name = "one", shortName = "o") String one, @Option(name = "two") String two, PipeOut out) {
-        out.println(">> option one equals: " + one);
-        out.println(">> option two equals: " + two);
-    }
-
-    // TODO msc rausziehen
     private JavaClass getJavaClass() throws FileNotFoundException {
         Resource<?> resource = shell.getCurrentResource();
         if (resource instanceof JavaResource) {
