@@ -10,6 +10,7 @@ import org.jboss.seam.forge.project.facets.JavaSourceFacet;
 import org.jboss.seam.forge.resources.Resource;
 import org.jboss.seam.forge.resources.java.JavaResource;
 import org.jboss.seam.forge.shell.Shell;
+import org.jboss.seam.forge.shell.ShellColor;
 import org.jboss.seam.forge.shell.plugins.*;
 
 import javax.inject.Inject;
@@ -54,10 +55,16 @@ public class LogPlugin implements Plugin {
                 field.setName(fieldName).setPrivate().setType(Logger.class).addAnnotation(Inject.class);
             }
 
+            // ad log statement to method
             Method<JavaClass> method = clazz.getMethod(targetMethod);
-            String body = method.getBody();
-            method.setBody("log.info(\"############### new Customer TODO created\");" + body);
+            if (method != null) {
+                String body = method.getBody();
+                method.setBody("log.info(\"############### new Customer TODO created\");" + body);
+            } else {
+                out.println(ShellColor.RED, "method does not exist");
+            }
 
+            // save class
             javaFacet.saveJavaSource(clazz);
 
         } catch (FileNotFoundException e) {
